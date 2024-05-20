@@ -1,0 +1,32 @@
+name: CD
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Download Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: docker-image
+        
+    - name: Load Docker Image
+      run: |
+        gunzip swagger-server.tar.gz
+        docker load --input swagger-server.tar
+        
+    - name: Deploy to Staging
+      env:
+        STAGING_HOST: ${{ secrets.STAGING_HOST }}
+      run: |
+        docker save swagger-server | bzip2 | ssh $STAGING_HOST 'bunzip2 | docker load'
+        ssh $STAGING_HOST 'docker run -d -p 8080:8080 --name swagger-server swagger-server'
+        
+    # Smoke-тесты и развертывание на Production
