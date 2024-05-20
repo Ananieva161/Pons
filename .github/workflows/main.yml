@@ -9,12 +9,18 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
     
+    - name: Install Docker
+      run: |
+        $ErrorActionPreference = 'Stop'
+        Install-Module -Name DockerMsftProvider -Force
+        Install-Package -Name docker -ProviderName DockerMsftProvider -Force
+        Start-Service docker
+        
     - name: Build and run Docker Compose
       run: |
         docker-compose up -d
-
