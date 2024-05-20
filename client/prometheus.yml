@@ -1,0 +1,72 @@
+# # my global config
+# global:
+#   scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+#   evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+#   # scrape_timeout is set to the global default (10s).
+
+# # Alertmanager configuration
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           # - alertmanager:9093
+
+# # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+# rule_files:
+#   # - "first_rules.yml"
+#   # - "second_rules.yml"
+
+# # A scrape configuration containing exactly one endpoint to scrape:
+# # Here it's Prometheus itself.
+# scrape_configs:
+#   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+#   - job_name: "prometheus"
+
+#     # metrics_path defaults to '/metrics'
+#     # scheme defaults to 'http'.
+
+#     static_configs:
+#       - targets: ["localhost:9090"]
+
+global:
+  scrape_interval: 15s
+
+# scrape_configs:
+#   - job_name: 'movies-api'
+#     static_configs:
+#       - targets: [' 192.168.73.28:8080']  # Замените 'movies-api' на адрес вашего приложения, где запущен Movies API
+scrape_configs:
+  - job_name: 'movies-api'
+    static_configs:
+      - targets: ['172.20.33.141:8080']
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['127.0.0.1:9090']  # Замените 'localhost' на адрес и порт, на котором работает Prometheus
+
+#  - job_name: 'foo'
+#    static_configs:
+#      - targets: ['foo:8080']
+#
+#  - job_name: 'bar'
+#    static_configs:
+#      - targets: ['bar:8081']
+
+  - job_name: 'vmagent'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['vmagent:8429']
+
+  - job_name: 'victoriametrics'
+    static_configs:
+      - targets: ['victoriametrics:8428']
+
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel_collector:9433'] 
+       # Пример: OpenTelemetry Collector
+  - job_name: 'loki'
+    static_configs:
+      - targets: ['loki:3100']  # Пример: Loki
+  - job_name: 'tempo'
+    static_configs:
+      - targets: ['tempo:3200']  # Пример: Tempo

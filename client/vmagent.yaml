@@ -1,0 +1,4 @@
+pushers:
+  - name: my_pusher
+    url: http://victoriametrics:8428/api/v1/write
+    timeout: 5s

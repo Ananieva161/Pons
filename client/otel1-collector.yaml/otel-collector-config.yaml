@@ -1,0 +1,33 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+  jaeger:
+    protocols:
+      thrift_http:
+        endpoint: 127.0.0.1:4317
+  zipkin:
+    protocols:
+      http:
+
+processors:
+  batch:
+
+exporters:
+  logging:
+
+service:
+  pipelines:
+    traces:
+
+      receivers: [otlp, jaeger]
+      processors: [batch]
+      exporters: [logging]
+    metrics:
+      receivers: []
+      processors: []
+      exporters: []
+
+extensions:
+  health_check:
+  zpages:

@@ -1,0 +1,138 @@
+openapi: 3.0.3
+info:
+  title: Movies API
+  description: API для работы с фильмотекой
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /movies:
+    get:
+      tags:
+      - movie
+      summary: Получить список всех фильмов
+      operationId: get_movies_list
+      responses:
+        "200":
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.movie_controller
+    post:
+      tags:
+      - movie
+      summary: Добавить новый фильм
+      operationId: add_movie
+      requestBody:
+        description: Новый фильм
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+        required: true
+      responses:
+        "201":
+          description: Фильм успешно создан
+      x-openapi-router-controller: swagger_server.controllers.movie_controller
+  /movies/{movieId}:
+    get:
+      tags:
+      - movie
+      summary: Получить информацию о фильме по ID
+      operationId: get_movie_by_id
+      parameters:
+      - name: movieId
+        in: path
+        description: ID фильма
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        "404":
+          description: Фильм не найден
+      x-openapi-router-controller: swagger_server.controllers.movie_controller
+    put:
+      tags:
+      - movie
+      summary: Обновить информацию о фильме по ID
+      operationId: update_movie_by_id
+      parameters:
+      - name: movieId
+        in: path
+        description: ID фильма
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Обновленная информация о фильме
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+        required: true
+      responses:
+        "200":
+          description: Успешное обновление фильма
+        "404":
+          description: Фильм не найден
+      x-openapi-router-controller: swagger_server.controllers.movie_controller
+    delete:
+      tags:
+      - movie
+      summary: Удалить фильм по ID
+      operationId: delete_movie_by_id
+      parameters:
+      - name: movieId
+        in: path
+        description: ID фильма
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Фильм успешно удален
+        "404":
+          description: Фильм не найден
+      x-openapi-router-controller: swagger_server.controllers.movie_controller
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+      example:
+      - id: "1"
+        title: Брат
+        description: Драматический фильм о бандитском мире 90-х годов в России
+      - id: "2"
+        title: Москва слезам не верит
+        description: Романтическая комедия о любви в Москве
+      - id: "3"
+        title: Левиафан
+        description: "Драма о судьбе человека, сражающегося с коррупцией в России"
+
