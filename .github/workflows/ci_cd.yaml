@@ -27,27 +27,49 @@ jobs:
     #     pytest tests/
         
   deploy:
-    needs: test
+
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
-    - name: Deploy to server
-      env:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - uses: actions/checkout@v3
+    
+    - name: List directory contents
       run: |
-        ssh $USERNAME@$HOST 'git pull'
-        # scp -r . $USERNAME@$HOST
-        ssh $USERNAME@$HOST 'docker build'
-        ssh $USERNAME@$HOST 'docker run -d -p 8080:8080 '
-    - name: Update Swagger documentation
+        ls -la
+        pwd
+        
+    - name: Build the Docker Compose stack
+      run: docker-compose build
+
+    - name: Push the Docker images
+      if: success() && github.ref == 'refs/heads/master'
       env:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        scp -r your-swagger-files $USERNAME@$HOST:/server/swagger/docs
-        ssh $USERNAME@$HOST 'cd /server/swagger/docs && docker build -t swagger-docs .'
-        ssh $USERNAME@$HOST 'cd /server/swagger/docs && docker run -d -p 8081:8080 swagger-docs'
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        docker-compose push
+    # needs: test
+    # runs-on: ubuntu-latest
+    
+    # steps:
+    # - uses: actions/checkout@v2
+    # - name: Deploy to server
+    #   env:
+    #     HOST: ${{ secrets.HOST }}
+    #     USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    #     PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    #   run: |
+    #     ssh $USERNAME@$HOST 'git pull'
+    #     # scp -r . $USERNAME@$HOST
+    #     ssh $USERNAME@$HOST 'docker build'
+    #     ssh $USERNAME@$HOST 'docker run -d -p 8080:8080 '
+    # - name: Update Swagger documentation
+    #   env:
+    #     HOST: ${{ secrets.HOST }}
+    #     USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    #     PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    #   run: |
+    #     scp -r your-swagger-files $USERNAME@$HOST:/server/swagger/docs
+    #     ssh $USERNAME@$HOST 'cd /server/swagger/docs && docker build -t swagger-docs .'
+    #     ssh $USERNAME@$HOST 'cd /server/swagger/docs && docker run -d -p 8081:8080 swagger-docs'
