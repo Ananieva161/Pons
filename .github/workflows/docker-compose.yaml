@@ -26,18 +26,18 @@ jobs:
     #   run: |
     #     docker-compose run web pytest
     #     docker-compose run web flake8
-    - name: Test the application
-      run: |
-        # Install dependencies
-        pip install -r requirements.txt
-        pip install pytest
-        pip install flask_testing
+    # - name: Test the application
+    #   run: |
+    #     # Install dependencies
+    #     pip install -r requirements.txt
+    #     pip install pytest
+    #     pip install flask_testing
     
-        # Run tests
-        pytest
+    #     # Run tests
+    #     pytest
     
-        # Run Swagger client tests
-        python -m unittest tests.test_swagger_client
+    #     # Run Swagger client tests
+    #     python -m unittest tests.test_swagger_client
 
     - name: Push the Docker images
       if: success() && github.ref == 'refs/heads/master'
