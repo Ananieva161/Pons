@@ -19,8 +19,8 @@ jobs:
         ls -la
         pwd
         
-    # - name: Build the Docker Compose stack
-    #   run: docker-compose build
+    - name: Build the Docker Compose stack
+      run: docker-compose build
       
     # - name: Test the application
     #   run: |
