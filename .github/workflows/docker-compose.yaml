@@ -31,6 +31,7 @@ jobs:
         # Install dependencies
         pip install -r requirements.txt
         pip install pytest
+        pip install flask_testing
     
         # Run tests
         pytest
