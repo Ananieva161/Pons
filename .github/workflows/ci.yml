@@ -23,4 +23,5 @@
            pip install pytest
            pip install flask_testing
        - name: Run tests
-         run: pytest tests/
+         run:    pytest -v tests/
+
