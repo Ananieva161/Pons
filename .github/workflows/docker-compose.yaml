@@ -1,0 +1,33 @@
+name: Docker Compose
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build the Docker Compose stack
+      run: docker-compose up -d
+      
+    - name: Test the application
+      run: |
+        docker-compose exec web pytest
+        docker-compose exec web flake8
+        
+    - name: Push the Docker images
+      if: success() && github.ref == 'refs/heads/main'
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        docker-compose push
+
