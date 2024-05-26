@@ -14,6 +14,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: List directory contents
+      run: |
+        ls -la
+        pwd
+        
     - name: Build the Docker Compose stack
       run: docker-compose up -d
       
@@ -30,4 +35,3 @@ jobs:
       run: |
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         docker-compose push
-
