@@ -32,7 +32,7 @@ class TestMovieController(BaseTestCase):
         Удалить фильм по ID
         """
         response = self.client.open(
-            '/movies/{movieId}'.format(movie_id=789),
+            '/movies/{movieid}'.format(movie_id=789),
             method='DELETE')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
