@@ -20,12 +20,12 @@ jobs:
         pwd
         
     - name: Build the Docker Compose stack
-      run: docker-compose up -d
+      run: docker-compose build
       
     - name: Test the application
       run: |
-        docker-compose exec web pytest
-        docker-compose exec web flake8
+        docker-compose run web pytest
+        docker-compose run web flake8
         
     - name: Push the Docker images
       if: success() && github.ref == 'refs/heads/master'
