@@ -32,7 +32,7 @@ class TestMovieController(BaseTestCase):
         Удалить фильм по ID
         """
         response = self.client.open(
-            '/movies/{movieid}'.format(movie_id=789),
+            '/movies/{movie_id}'.format(movie_id=789),
             method='DELETE')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -43,7 +43,7 @@ class TestMovieController(BaseTestCase):
         Получить информацию о фильме по ID
         """
         response = self.client.open(
-            '/movies/{movieId}'.format(movie_id=789),
+            '/movies/{movie_id}'.format(movie_id=789),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -66,7 +66,7 @@ class TestMovieController(BaseTestCase):
         """
         body = Movie()
         response = self.client.open(
-            '/movies/{movieId}'.format(movie_id=789),
+            '/movies/{movie_id}'.format(movie_id=789),
             method='PUT',
             data=json.dumps(body),
             content_type='application/json')
