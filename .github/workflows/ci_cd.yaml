@@ -38,16 +38,16 @@ jobs:
         USERNAME: ${{ secrets.DOCKER_USERNAME }}
         PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        ssh $USERNAME@$HOST 'cd /path/to/your/project && git pull'
-        scp -r . $USERNAME@$HOST:/path/to/your/project
-        ssh $USERNAME@$HOST 'cd /path/to/your/project && docker build -t your-app .'
-        ssh $USERNAME@$HOST 'cd /path/to/your/project && docker run -d -p 8080:8080 your-app'
+        ssh $USERNAME@$HOST 'git pull'
+        # scp -r . $USERNAME@$HOST
+        ssh $USERNAME@$HOST 'docker build'
+        ssh $USERNAME@$HOST 'docker run -d -p 8080:8080 '
     - name: Update Swagger documentation
       env:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.DOCKER_USERNAME }}
         PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        scp -r your-swagger-files $USERNAME@$HOST:/path/to/your/swagger/docs
-        ssh $USERNAME@$HOST 'cd /path/to/your/swagger/docs && docker build -t swagger-docs .'
-        ssh $USERNAME@$HOST 'cd /path/to/your/swagger/docs && docker run -d -p 8081:8080 swagger-docs'
+        scp -r your-swagger-files $USERNAME@$HOST:/server/swagger/docs
+        ssh $USERNAME@$HOST 'cd /server/swagger/docs && docker build -t swagger-docs .'
+        ssh $USERNAME@$HOST 'cd /server/swagger/docs && docker run -d -p 8081:8080 swagger-docs'
