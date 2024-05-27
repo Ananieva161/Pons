@@ -26,9 +26,10 @@ jobs:
     - name: Run Swagger Server
       run: |
         cd server
-        python -m swagger_server.__main__
-
+        python -m swagger_server.main
+        
   run-client:
+    needs: run-swagger-server
     runs-on: ubuntu-latest
     
     steps:
