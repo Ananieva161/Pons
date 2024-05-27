@@ -1,0 +1,59 @@
+name: Swagger Server, Client, Docker Compose and Grafana
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  run-server-and-client:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+        
+    - name: Install server dependencies
+      run: |
+        cd server
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install prometheus_client
+        pip install prometheus_flask_exporter
+        
+    - name: Run Swagger Server
+      run: |
+        cd server
+        python -m swagger_server.main &
+        echo "SERVER_IP=$(hostname -I | awk '{print $1}')" >> $GITHUB_OUTPUT
+        
+    - name: Install client dependencies  
+      run: |
+        cd client
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install prometheus_client
+        pip install prometheus_flask_exporter
+        
+    - name: Run Client
+      run: |
+        cd client
+        python main.py
+        
+    - name: Set up Docker Compose
+      uses: docker-practice/actions-setup-docker@master
+        
+    - name: Start Docker Compose
+      run: |
+        docker-compose -f docker-compose.yml up -d
+        
+    - name: Open Grafana
+      run: |
+        echo "Grafana URL: http://${{ steps.run-server-and-client.outputs.SERVER_IP }}:3000"
+        sleep 30 # Wait for Grafana to start
+        google-chrome http://${{ steps.run-server-and-client.outputs.SERVER_IP }}:3000
