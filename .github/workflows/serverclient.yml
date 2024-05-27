@@ -22,6 +22,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r server/requirements.txt
         pip install prometheus_client
+        pip install prometheus_flask_exporter
     - name: Run Swagger Server
       run: |
         cd server
@@ -41,6 +42,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r client/requirements.txt
         pip install prometheus_client
+        pip install prometheus_flask_exporter
     - name: Run Client
       run: |
         cd client
