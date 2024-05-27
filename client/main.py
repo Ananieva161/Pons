@@ -9,7 +9,7 @@ from prometheus_flask_exporter import PrometheusMetrics
 
 
 # Настройка логгера
-logging.basicConfig(filename='C:/Users/Мария/Desktop/сервер/var/log/123.log', level=logging.INFO)  # Указываем файл, куда записывать логи, и уровень логирования
+logging.basicConfig(filename='./var/log/123.log', level=logging.INFO)  # Указываем файл, куда записывать логи, и уровень логирования
 
 registry = CollectorRegistry()
 gauge_movies_added = Gauge('movies_added_total', 'Total number of movies added', registry=registry)
