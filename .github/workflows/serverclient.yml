@@ -2,9 +2,9 @@ name: Swagger Server
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ master ]
 
 jobs:
 
@@ -21,11 +21,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r server/requirements.txt
+        pip install prometheus_client
     - name: Run Swagger Server
       run: |
-        cd server/swagger_server
-        python __main__.py
-        
+        cd server
+        python -m swagger_server.__main__
+
   run-client:
     runs-on: ubuntu-latest
     
@@ -39,6 +40,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r client/requirements.txt
+        pip install prometheus_client
     - name: Run Client
       run: |
         cd client
