@@ -20,7 +20,8 @@ jobs:
         
     - name: Build the Docker Compose stack
       run: docker-compose build
-      
+    - name: Build the Docker Compose 
+      run: docker-compose up -d
     # - name: Test the application
     #   run: |
     #     docker-compose run web pytest
